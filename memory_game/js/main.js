@@ -1,3 +1,6 @@
+var playerScore = 0;
+document.getElementById("playerScore").innerHTML = playerScore;
+
 var cards = [
 {
   rank: "queen",
@@ -21,28 +24,27 @@ var cards = [
 }
 ];
 
-
 var cardsInPlay = [];
+
+var updateScore = function(difference){
+  playerScore += difference;
+  document.getElementById("playerScore").innerHTML = playerScore;
+}
 
 var checkForMatch = function(){
   if (cardsInPlay[0] === cardsInPlay[1]){
-    alert("You found a match!");
+    updateScore(1);
+    setTimeout(shuffle, 1000);
   } else {
-    alert("Sorry, try again");
+    setTimeout(turnCardsOver, 1000);
   }
 }
 
 var flipCard = function(){
   var cardId = this.getAttribute('data-id');
-  console.log("User flipped " + cards[cardId].rank);
-
+  // console.log("User flipped " + cards[cardId].rank);
   cardsInPlay.push(cards[cardId].rank);
-
-  console.log(cards[cardId].cardImage);
-  console.log(cards[cardId].suit);
-
   this.setAttribute('src',cards[cardId].cardImage);
-
   if (cardsInPlay.length === 2) {
     checkForMatch();
   }
@@ -50,7 +52,6 @@ var flipCard = function(){
 
 var createBoard = function(){
   for (var i = 0; i < cards.length; i++){
-    //add cards[i] to the board
     var cardElement = document.createElement('img');
     cardElement.setAttribute('src',"images/back.png");
     cardElement.setAttribute('data-id',i);
@@ -59,5 +60,38 @@ var createBoard = function(){
   }
 }
 
+var turnCardsOver = function(){
+  cardsInPlay = [];
+  var cardElements = document.getElementById("game-board").childNodes;
+  for (var i = 0; i < cards.length; i++){
+    cardElements[i].setAttribute('src',"images/back.png");
+  }
+}
+
+var reset = function() {
+  shuffle();
+  updateScore((-1) * playerScore);
+}
+
+var shuffle = function() {
+  // shuffle code taken from example on StackOverflow
+  // Randomize the card order
+  var j, x, i;
+    for (i = cards.length; i; i--) {
+        j = Math.floor(Math.random() * i);
+        x = cards[i - 1];
+        cards[i - 1] = cards[j];
+        cards[j] = x;
+    }
+    var cardElements = document.getElementById("game-board").childNodes;
+    for (var i = 0; i < cards.length; i++){
+      cardElements[i].setAttribute('data-id',i);
+    }
+    turnCardsOver();
+    // no cards actively selected
+    cardsInPlay = [];
+}
 
 createBoard();
+document.getElementById("reset").addEventListener('click',reset);
+document.getElementById("shuffle").addEventListener('click',shuffle);

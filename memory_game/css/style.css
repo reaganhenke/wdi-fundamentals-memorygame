@@ -102,3 +102,25 @@ footer p {
   height: 0;
   font-size: 0;
 }
+
+button {
+  font-family: "Raleway", sans-serif;
+  text-transform: uppercase;
+  background-color: #0D2C40;
+  color: #fff;
+  border-radius: 25px;
+  font-size: 18px;
+  letter-spacing: .08em;
+  font-weight: 500;
+  padding: 8px 15px;
+  border: none;
+}
+
+button:hover {
+  background-color: #1A5982;
+}
+
+#playerScore {
+  font-size: 22px;
+  font-weight: 800;
+}
